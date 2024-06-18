@@ -1,0 +1,46 @@
+---
+title: "Assignment 5!"
+author: "Lauren Walsh"
+date: "2024-06-17"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+#Import and edit data
+```{r}
+library(readxl)
+library(ggplot2)
+library(tidyverse)
+Assignment5 <- read_excel("C:/Users/walsh/Downloads/Assignment5.xlsx")
+
+data<- Assignment5 
+
+data1<- data%>%
+  rowwise() %>%
+  mutate(R1avg=mean(c(Microbe_1_r1,Microbe_1_r2,Microbe_1_r3)))%>%
+  mutate(R1sd=sd(c(Microbe_1_r1,Microbe_1_r2,Microbe_1_r3)))%>%
+  mutate(R2avg=mean(c(Microbe_2_r1,Microbe_2_r2,Microbe_2_r3)))%>%
+  mutate(R2sd=sd(c(Microbe_2_r1,Microbe_2_r2,Microbe_2_r3)))%>%
+  mutate(R3avg=mean(c(Microbe_3_r1,Microbe_3_r2,Microbe_3_r3)))%>%
+  mutate(R3sd=sd(c(Microbe_3_r1,Microbe_3_r2,Microbe_3_r3)))
+```
+
+
+#And Plot!
+
+```{r}
+p<- ggplot(data1,aes(x=Time_hours)) +
+  geom_line(aes(y=R1avg), color = "blue")+
+  geom_line(aes(y=R2avg), color = "orange")+
+  geom_line(aes(y=R3avg), color = "lightblue")+
+  geom_point(aes(y=R1avg))+
+  geom_point(aes(y=R2avg))+
+  geom_point(aes(y=R3avg))+
+  geom_errorbar(aes(ymin = R1avg-R1sd, ymax = R1avg + R1sd), width=.1)+
+  geom_errorbar(aes(ymin = R2avg-R2sd, ymax = R2avg + R2sd), width=.1)+
+  geom_errorbar(aes(ymin = R3avg-R3sd, ymax = R3avg + R3sd), width=.1)+
+  labs(x="Time(hours)", y="Total number of cells (log)")+
+  theme(legend.position = "none")
+p
+```
